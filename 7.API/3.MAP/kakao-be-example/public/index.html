@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>카카오맵 인구 시각화</title>
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=KAKAO_API_KEY"></script>
+    <style>
+      #map {
+        width: 100%;
+        height: 600px;
+      }
+      /* 툴팁(레이블) 스타일 커스텀 */
+      .marker-label {
+        background: none;
+        border: none;
+        color: #fff;
+        font-weight: bold;
+        text-shadow: 1px 1px 2px #000;
+        pointer-events: none; /* 클릭 방해 금지 */
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+
+    <script>
+      // const container = document.getElementById('map');
+      // const options = {
+      //   center: new kakao.maps.LatLng(37.5665, 126.978),
+      //   level: 8,
+      // };
+      // const map = new kakao.maps.Map(container, options);
+
+      // // 인구수에 따른 반지름 계산 (단위: 미터)
+      // function calculateMarkerRadius(population) {
+      //   let minRadius = 1000; // 최소 1km
+      //   let maxRadius = 4000; // 최대 4km
+      //   let minPop = 100000;
+      //   let maxPop = 1000000;
+
+      //   // 범위를 벗어나는 값 처리
+      //   if (population < minPop) return minRadius;
+      //   if (population > maxPop) return maxRadius;
+
+      //   return minRadius + ((population - minPop) / (maxPop - minPop)) * (maxRadius - minRadius);
+      // }
+
+      // // 데이터 가져오기 (예시: fetch('/api/seoul'))
+      // fetch('/api/seoul')
+      //   .then((res) => res.json())
+      //   .then((data) => {
+      //     data.forEach((item) => {
+      //       const position = new kakao.maps.LatLng(item.lat, item.lng);
+      //       const radius = calculateMarkerRadius(parseInt(item.population));
+
+      //       // 1. 원(Circle) 생성
+      //       const circle = new kakao.maps.Circle({
+      //         center: position,
+      //         radius: radius,
+      //         strokeWeight: 1,
+      //         strokeColor: '#FF0000',
+      //         strokeOpacity: 0.8,
+      //         strokeStyle: 'solid',
+      //         fillColor: '#FF0000',
+      //         fillOpacity: 0.4,
+      //       });
+      //       circle.setMap(map);
+
+      //       // 2. 툴팁(이름 레이블) 생성 - CustomOverlay 사용
+      //       const content = `<div class="marker-label">${item.district}</div>`;
+      //       const customOverlay = new kakao.maps.CustomOverlay({
+      //         position: position,
+      //         content: content,
+      //         yAnchor: 0.5,
+      //       });
+      //       customOverlay.setMap(map);
+
+      //       // 3. 인포윈도우(클릭 시 상세 팝업) 생성
+      //       const infowindow = new kakao.maps.InfoWindow({
+      //         content: `<div style="padding:10px; min-width:150px;">
+      //                     <strong>${item.district}</strong><br>
+      //                     인구: ${parseInt(item.population).toLocaleString()}명
+      //                   </div>`,
+      //         removable: true,
+      //       });
+
+      //       // 원 클릭 시 인포윈도우 표시
+      //       kakao.maps.event.addListener(circle, 'click', function () {
+      //         infowindow.open(map, new kakao.maps.Marker({ position: position }));
+      //         // Note: Circle에는 open 메소드가 직접 없으므로 마커 위치를 기준으로 띄웁니다.
+      //       });
+      //     });
+      //   })
+      //   .catch((err) => console.error('데이터 로드 실패:', err));
+      kakao.maps.load(async () => {
+        const mapContainer = document.getElementById('map');
+
+        const mapOption = {
+          center: new kakao.maps.LatLng(37.5665, 126.978),
+          level: 7,
+        };
+        const map = new kakao.maps.Map(mapContainer.mapOption);
+        fetch('/api/seoul')
+          .then((res) => res.json())
+          .then((data) => {
+            console.log(data);
+          });
+      });
+    </script>
+  </body>
+</html>

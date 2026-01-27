@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin=""
+    />
+    <style>
+      #map {
+        height: 600px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+      crossorigin=""
+    ></script>
+    <script>
+      let map = L.map('map').setView([37.5665, 126.978], 12);
+
+      L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {}).addTo(map);
+
+      L.marker([37.56193463228452, 127.06356366556827]).addTo(map).bindPopup('새싹 캠퍼스').openPopup();
+
+      const seoulDistricts = [
+        { name: 'Jongno-gu', lat: 37.57305, lng: 126.979189 },
+        { name: 'Jung-gu', lat: 37.561128, lng: 126.994303 },
+        { name: 'Yongsan-gu', lat: 37.532598, lng: 126.990257 },
+        { name: 'Gangnam-gu', lat: 37.517236, lng: 127.047325 },
+        { name: 'Seocho-gu', lat: 37.48357, lng: 127.032646 },
+        { name: 'Songpa-gu', lat: 37.514575, lng: 127.105981 },
+        { name: 'Mapo-gu', lat: 37.563756, lng: 126.908421 },
+        { name: 'Gangdong-gu', lat: 37.530125, lng: 127.123764 },
+      ];
+      const apiKey = '475ff9be830899f4e369580600e19c7b';
+      // const apiKey = 'put your api key';
+      seoulDistricts.forEach((gu) => {
+        const url = `https://api.openweathermap.org/data/2.5/weather?lat=${gu.lat}&lon=${gu.lng}&units=metric&appid=${apiKey}&lang=kr`;
+        fetch(url)
+          .then((resp) => resp.json())
+          .then((data) => {
+            const temp = data.main.temp;
+            const weather = data.weather[0].description;
+            const icon = data.weather[0].icon;
+
+            const iconUrl = `https://openweathermap.org/img/wn/${icon}.png`;
+
+            const marker = L.marker([gu.lat, gu.lng]).addTo(map);
+            marker.bindPopup(`
+            <div class="weather-popup">
+              <img src="${iconUrl}" alt="${weather}"/> <br>
+              ${weather} </br>
+              <span>${temp}&deg;C</span>
+              `);
+          });
+      });
+    </script>
+  </body>
+</html>

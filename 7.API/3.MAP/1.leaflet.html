@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin=""
+    />
+    <style>
+      #map {
+        height: 600px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+      crossorigin=""
+    ></script>
+    <script>
+      let map = L.map('map').setView([37.5665, 126.978], 12);
+
+      L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {}).addTo(map);
+
+      L.marker([37.56193463228452, 127.06356366556827]).addTo(map).bindPopup('새싹 캠퍼스').openPopup();
+      L.marker([37.55190475382247, 127.0143157522103]).addTo(map).bindPopup('킹수').openPopup();
+      let touristSpots = [
+        {
+          name: '경복궁',
+          location: [37.5786, 126.9772],
+          description: '조선 왕조의 법궁으로, 한국의 전통 건축미를 느낄 수 있는 서울의 대표 궁궐입니다.',
+          imageUrl: 'https://loremflickr.com/600/400/gyeongbokgung,palace',
+        },
+        {
+          name: '명동',
+          location: [37.5635, 126.981],
+          description: '쇼핑과 먹거리의 중심지로, 활기찬 서울의 에너지를 느낄 수 있는 거리입니다.',
+          imageUrl: 'https://loremflickr.com/600/400/myeongdong,shopping',
+        },
+        {
+          name: '남산서울타워',
+          location: [37.5511, 126.9882],
+          description: '서울 시내를 360도 파노라마 뷰로 감상할 수 있는 서울의 랜드마크입니다.',
+          imageUrl: 'https://loremflickr.com/600/400/nseoultower,tower',
+        },
+        {
+          name: '롯데월드타워',
+          location: [37.5126, 127.1025],
+          description: '세계에서 5번째로 높은 빌딩으로, 서울의 스카이라인을 압도하는 초고층 타워입니다.',
+          imageUrl: 'https://loremflickr.com/600/400/lotteworldtower,skyscraper',
+        },
+        {
+          name: '북촌한옥마을',
+          location: [37.5829, 126.9835],
+          description: '전통 한옥이 밀집되어 있어 옛 서울의 정취를 느낄 수 있는 마을입니다.',
+          imageUrl: 'https://loremflickr.com/600/400/hanok,village',
+        },
+        {
+          name: '동대문디자인플라자 (DDP)',
+          location: [37.5668, 127.0094],
+          description: '자하 하디드가 설계한 세계 최대 규모의 3차원 비정형 건축물입니다.',
+          imageUrl: 'https://loremflickr.com/600/400/ddp,seoul',
+        },
+        {
+          name: '광장시장',
+          location: [37.5701, 126.9993],
+          description: '백년의 역사를 자랑하며, 빈대떡과 마약김밥 등 한국의 길거리 음식을 맛볼 수 있는 곳입니다.',
+          imageUrl: 'https://loremflickr.com/600/400/koreanfood,market',
+        },
+        {
+          name: '여의도 한강공원',
+          location: [37.5284, 126.9332],
+          description: '도심 속 휴식 공간으로, 한강 변에서 피크닉과 자전거 라이딩을 즐기기 좋습니다.',
+          imageUrl: 'https://loremflickr.com/600/400/hanriver,park',
+        },
+        {
+          name: '인사동',
+          location: [37.5744, 126.9841],
+          description: '골동품, 화랑, 전통 찻집이 모여 있어 한국 고유의 예술 문화를 접할 수 있는 곳입니다.',
+          imageUrl: 'https://loremflickr.com/600/400/insadong,tradition',
+        },
+        {
+          name: '청와대',
+          location: [37.5866, 126.9748],
+          description: '오랜 시간 대통령의 집무실이었던 곳으로, 현재는 국민들에게 개방된 역사적 명소입니다.',
+          imageUrl: 'https://loremflickr.com/600/400/bluehouse,korea',
+        },
+      ];
+
+      touristSpots.forEach((spot) => {
+        // let marker = L.marker(spot.location).addTo(map).bindPopup(spot.name);
+        // marker.on('click', () => {
+        //   let image = new Image();
+        //   image.src = spot.imageUrl;
+        //   image.style.width = '100%';
+
+        //   image.onload = () => {
+        //     let popupContent = `
+        // <div>
+        //     <h3>${spot.name}</h3>
+        //     <p>${spot.description}</p>
+        //     <img src="${spot.imageUrl}" style="width: 100px"/>
+        // </div>
+        //     `;
+        //   };
+        //   // map.flyTo(spot.location, 16);
+        //   let popup = L.popup().setLatLng(spot.location).setContent(popupContent).open(map);
+        // });
+        touristSpots.forEach((spot) => {
+          // 1. 팝업에 들어갈 HTML 구조를 미리 만듭니다.
+          // 이미지 너비를 200px 정도로 조절했습니다.
+          let content = `
+    <div style="width: 200px;">
+      <h3 style="margin: 0 0 5px 0;">${spot.name}</h3>
+      <p style="font-size: 12px; color: #666;">${spot.description}</p>
+      <img src="${spot.imageUrl}" alt="${spot.name}" style="width: 100%; border-radius: 5px; margin-top: 5px;"/>
+    </div>
+  `;
+
+          // 2. 마커를 생성하고 bindPopup으로 위 콘텐츠를 연결합니다.
+          let marker = L.marker(spot.location).addTo(map);
+
+          marker.bindPopup(content);
+
+          // 3. 클릭 시 지도가 해당 위치로 이동하게 하고 싶다면 아래 이벤트를 추가하세요 (선택)
+          marker.on('click', function () {
+            map.flyTo(spot.location, 15);
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
